@@ -17,9 +17,6 @@ def style():
     background-color: #36344B;
     color: #B3B3B3;
     font-size: 10px;
-    hight: 1em;
-    width: 5em;
-    border-radius: 5px 5px 5px 5px;
     }
 
     div.stButton > button:hover {
