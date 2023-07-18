@@ -22,6 +22,11 @@ def show_results(highlights):
     df_html = df_html.replace("<table", f"{style}<table")
     st.markdown(df_html, unsafe_allow_html=True)
 
+    csv_data = df.to_csv(index=False)
+    b64 = base64.b64encode(csv_data.encode()).decode()
+    href = f'<a href="data:file/csv;base64,{b64}" download="highlights.csv">Download Highlights CSV</a>'
+    st.markdown(href, unsafe_allow_html=True)
+
 
 def start_app():
     style()
