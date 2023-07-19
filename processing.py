@@ -9,7 +9,7 @@ def process_pdf(highlight_amount, pdf_bytes, api_key):
     with st.spinner(text="In progress..."):
         oneai.api_key = api_key
         higighlights_pipeline = oneai.Pipeline(
-            [oneai.skills.Highlights(params={"amount": highlight_amount})]
+            [oneai.skills.Highlights(params={"amount": "less"})]
         )
         segments_pipeline = oneai.Pipeline(
             [
