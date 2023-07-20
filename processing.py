@@ -8,15 +8,20 @@ import streamlit.components.v1 as components
 def highlight_is_mostly_name(highlight, names):
     heighlight_start = highlight.output_spans[0].start
     heighlight_end = highlight.output_spans[0].end
+    names_in_highlight_lengthes = []
     for name in names:
         name_start = name.output_spans[0].start
         name_end = name.output_spans[0].end
         if not (name_start >= heighlight_end or name_end <= heighlight_start):
-            name_to_highlight_ratio = (
-                min(name_end, heighlight_end) - max(name_start, heighlight_start)
-            ) / (heighlight_end - heighlight_start)
-            if name_to_highlight_ratio > 0.5:
-                return True
+            name_to_highlight_length = min(name_end, heighlight_end) - max(
+                name_start, heighlight_start
+            )
+            names_in_highlight_lengthes.append(name_to_highlight_length)
+    name_to_highlight_ratio = sum(names_in_highlight_lengthes) / (
+        heighlight_end - heighlight_start
+    )
+    if name_to_highlight_ratio > 0.5:
+        return True
     return False
 
 
