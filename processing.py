@@ -11,10 +11,7 @@ def highlight_is_mostly_name(highlight, names):
     for name in names:
         name_start = name.output_spans[0].start
         name_end = name.output_spans[0].end
-        if (
-            heighlight_start <= name_start <= heighlight_end
-            or heighlight_start <= name_end <= heighlight_end
-        ):
+        if not (name_start >= heighlight_end or name_end <= heighlight_start):
             name_to_highlight_ratio = (
                 min(name_end, heighlight_end) - max(name_start, heighlight_start)
             ) / (heighlight_end - heighlight_start)
