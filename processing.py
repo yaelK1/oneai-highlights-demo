@@ -53,7 +53,7 @@ def process_pdf(highlight_amount, pdf_bytes, api_key):
                     highlight.start = offset + int(highlight.output_spans[0].start)
                     highlight.end = offset + int(highlight.output_spans[0].end)
                     highlight.highlight = highlight.span_text
-                    words_context = 50
+                    words_context = 30
                     highlight.context = (
                         (
                             " ".join(
