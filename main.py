@@ -10,14 +10,14 @@ from design import style
 
 def show_results(highlights):
     df = pd.DataFrame(
-        [[h.highlight, h.score, h.pages] for h in highlights],
-        columns=["highlight", "score", "pages"],
+        [[h.highlight, h.score, h.pages, h.context] for h in highlights],
+        columns=["Highlight", "Score", "Pages", "Context"],
     )
-    max_length = df["highlight"].str.len().max()
+    max_length = df["Highlight"].str.len().max()
     style = f"<style>.highlight-col {{ width: {max_length}ch; }}</style>"
     style += "<style>.pages-col, .score-col { width: 50px; }</style>"
     df_html = df.to_html(
-        columns=["highlight", "score", "pages"], index=False, justify="left"
+        columns=["Highlight", "Score", "Pages", "Context"], index=False, justify="left"
     )
     df_html = df_html.replace("<table", f"{style}<table")
     st.markdown(df_html, unsafe_allow_html=True)

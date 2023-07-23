@@ -52,8 +52,26 @@ def process_pdf(highlight_amount, pdf_bytes, api_key):
                     highlight.segment_text = segment.span_text
                     highlight.start = offset + int(highlight.output_spans[0].start)
                     highlight.end = offset + int(highlight.output_spans[0].end)
-                    highlight.score = float(highlight.data["score"])
                     highlight.highlight = highlight.span_text
+                    words_context = 50
+                    highlight.context = (
+                        (
+                            " ".join(
+                                highlight.segment_text[: highlight.start].split(" ")[
+                                    -words_context:
+                                ]
+                            )
+                            + highlight.highlight
+                            + " ".join(
+                                highlight.segment_text[highlight.end :].split(" ")[
+                                    :words_context
+                                ]
+                            )
+                        )
+                        .replace("\n", "")
+                        .strip()
+                    )
+                    highlight.score = float(highlight.data["score"])
                     for page in pages:
                         page.start = int(page.output_spans[0].start)
                         page.end = int(page.output_spans[0].end)
