@@ -34,7 +34,11 @@ def show_results(highlights):
 
     # Rename the new column to "Context"
     df.rename(columns={"Highlighted_Context": "Context"}, inplace=True)
-
+    # Convert DataFrame to CSV data and generate a download link for the CSV file
+    csv_data = df.to_csv(index=False)
+    b64 = base64.b64encode(csv_data.encode()).decode()
+    href = f'<a href="data:file/csv;base64,{b64}" download="highlights.csv">Download Highlights CSV</a>'
+    st.markdown(href, unsafe_allow_html=True)
     # Convert the DataFrame to an HTML table
     df_html = df.to_html(
         columns=["Highlight", "Score", "Pages", "Context"], index=False, justify="left"
@@ -45,12 +49,6 @@ def show_results(highlights):
 
     # Display the HTML table in Streamlit
     st.markdown(df_html, unsafe_allow_html=True)
-
-    # Convert DataFrame to CSV data and generate a download link for the CSV file
-    csv_data = df.to_csv(index=False)
-    b64 = base64.b64encode(csv_data.encode()).decode()
-    href = f'<a href="data:file/csv;base64,{b64}" download="highlights.csv">Download Highlights CSV</a>'
-    st.markdown(href, unsafe_allow_html=True)
 
 
 def start_app():
