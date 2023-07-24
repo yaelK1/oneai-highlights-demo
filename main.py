@@ -6,6 +6,7 @@ import pandas as pd
 from processing import process_pdf
 from PIL import Image
 from design import style
+import streamlit_toggle as tog
 
 
 def show_results(highlights):
@@ -64,24 +65,38 @@ def start_app():
         "Select amount of highlights", ["less", "normal", "more"]
     )
     pdf_file = st.file_uploader("Upload PDF file", type=["pdf"])
-    submit_button = st.button("Run")
-    if submit_button:
-        if api_key is None:
-            st.write("Please enter your API key")
-        elif pdf_file is not None:
-            with open("uploaded_file.pdf", "wb") as f:
-                f.write(pdf_file.getvalue())
-            with open("uploaded_file.pdf", "rb") as f:
-                try:
-                    highlights = process_pdf(highlight_amount, f, api_key)
-                    if highlights is not None:
-                        show_results(highlights)
-                    with open("uploaded_file.pdf", "rb") as f:
-                        base64_pdf = base64.b64encode(f.read()).decode("utf-8")
-                        pdf_display = f'<embed src="data:application/pdf;base64,{base64_pdf}" width="700" height="1000" type="application/pdf">'
-                        st.markdown(pdf_display, unsafe_allow_html=True)
-                    os.remove("uploaded_file.pdf")
-                except Exception as e:
-                    st.write(e)
-        else:
-            st.write("Please upload a PDF file")
+    col3, col4 = st.columns([1, 1])
+    # show_all_highlights = False
+    col3, col4 = st.columns([1, 1])
+    with col3:
+        submit_button = st.button("Run")
+        if submit_button:
+            if api_key is None:
+                st.write("Please enter your API key")
+            elif pdf_file is not None:
+                with open("uploaded_file.pdf", "wb") as f:
+                    f.write(pdf_file.getvalue())
+                with open("uploaded_file.pdf", "rb") as f:
+                    try:
+                        highlights = process_pdf(highlight_amount, f, api_key)
+                        if highlights is not None:
+                            show_results(highlights)
+                        with open("uploaded_file.pdf", "rb") as f:
+                            base64_pdf = base64.b64encode(f.read()).decode("utf-8")
+                            pdf_display = f'<embed src="data:application/pdf;base64,{base64_pdf}" width="700" height="1000" type="application/pdf">'
+                            st.markdown(pdf_display, unsafe_allow_html=True)
+                        os.remove("uploaded_file.pdf")
+                    except Exception as e:
+                        st.write(e)
+            else:
+                st.write("Please upload a PDF file")
+    # with col4:
+    #     switch = tog.st_toggle_switch(
+    #         label="Show all highlights",
+    #         key="show_all_highlights",
+    #         label_after=True,
+    #     )
+    #     if switch:
+    #         show_all_highlights = True
+    #     else:
+    #         show_all_highlights = False
