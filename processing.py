@@ -70,7 +70,7 @@ def return_segment_highlights(segment, pages):
                         or page.start <= highlight.end <= page.end
                     ):
                         highlight.pages.append(page.data["numeric_value"])
-                    highlights.append(highlight)
+                highlights.append(highlight)
         return [highlights, errpr_while_segment_higlight]
     except Exception as e:
         return [None, e]
@@ -100,7 +100,11 @@ def process_pdf(highlight_amount, pdf_bytes, api_key):
             if len(highlights) == 0:
                 st.error(error_while_segment_higlight)
                 return None
-            return highlights
+            unique_highlights = []
+            for highlight in highlights:
+                if highlight not in unique_highlights:
+                    unique_highlights.append(highlight)
+            return unique_highlights
 
         except Exception as e:
             st.error("Error while processing the PDF file")
