@@ -100,11 +100,7 @@ def process_pdf(highlight_amount, pdf_bytes, api_key):
             if len(highlights) == 0:
                 st.error(error_while_segment_higlight)
                 return None
-            unique_highlights = []
-            for highlight in highlights:
-                if highlight not in unique_highlights:
-                    unique_highlights.append(highlight)
-            return unique_highlights
+            return highlights
 
         except Exception as e:
             st.error("Error while processing the PDF file")
