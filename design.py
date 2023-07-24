@@ -37,9 +37,6 @@ def style():
         .stTextInput > div > input {
             color: #FFFFFF;
         }
-        .stTextInput > label {
-            color: #FFFFFF;
-        }
         .stSelectbox > label {
             color: #FFFFFF;
         }   
