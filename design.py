@@ -49,11 +49,24 @@ def style():
         iframe {
             background-color: #15151F;
         }
-        /* Custom styles for MuiGrid-root and MuiGrid-item classes */
-        .MuiGrid-root, .MuiGrid-item {
-            background-color: #36344B;
+        
+        /* Adjust text color in the table */
+        .stDataFrame td {
+            color: #FFFFFF;
+        }
+        
+        /* Make the text color lighter */
+        body, p, h1, h2, h3, h4, h5, h6, span, div {
+            color: #D0D0D0; /* You can adjust the color to your desired lighter shade */
         }
         </style>
+        <script>
+        // Apply custom style to select box options
+        const selectOptions = document.querySelectorAll('.st-af');
+        for (const option of selectOptions) {
+            option.style.color = '#4A4A4A'; // You can adjust the color to your desired darker shade
+        }
+        </script>
         """,
         unsafe_allow_html=True,
     )
