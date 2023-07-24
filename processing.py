@@ -97,10 +97,18 @@ def process_pdf(highlight_amount, pdf_bytes, api_key):
                 ) = return_segment_highlights(segment, pages)
                 if highlights_segment is not None:
                     highlights.extend(highlights_segment)
+                else:
+                    st.error(error_while_segment_higlight)
             if len(highlights) == 0:
                 st.error(error_while_segment_higlight)
                 return None
-            return highlights
+            highlight_text_distinct = []
+            distinct_highlights = []
+            for highlight in highlights:
+                if highlight.span_text not in highlight_text_distinct:
+                    highlight_text_distinct.append(highlight.span_text)
+                    distinct_highlights.append(highlight)
+            return distinct_highlights
 
         except Exception as e:
             st.error("Error while processing the PDF file")
