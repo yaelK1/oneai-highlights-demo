@@ -74,13 +74,14 @@ def start_app():
             with open("uploaded_file.pdf", "rb") as f:
                 try:
                     highlights = process_pdf(highlight_amount, f, api_key)
-                    show_results(highlights)
+                    if highlights is not None:
+                        show_results(highlights)
+                    with open("uploaded_file.pdf", "rb") as f:
+                        base64_pdf = base64.b64encode(f.read()).decode("utf-8")
+                        pdf_display = f'<embed src="data:application/pdf;base64,{base64_pdf}" width="700" height="1000" type="application/pdf">'
+                        st.markdown(pdf_display, unsafe_allow_html=True)
+                    os.remove("uploaded_file.pdf")
                 except Exception as e:
                     st.write(e)
-            with open("uploaded_file.pdf", "rb") as f:
-                base64_pdf = base64.b64encode(f.read()).decode("utf-8")
-                pdf_display = f'<embed src="data:application/pdf;base64,{base64_pdf}" width="700" height="1000" type="application/pdf">'
-                st.markdown(pdf_display, unsafe_allow_html=True)
-            os.remove("uploaded_file.pdf")
         else:
             st.write("Please upload a PDF file")
