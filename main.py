@@ -68,7 +68,7 @@ def start_app():
     with col3:
         submit_button = st.button("Run")
         if submit_button:
-            if api_key is None:
+            if api_key is None or api_key == "":
                 st.write("Please enter your API key")
             elif pdf_file is not None:
                 with open("uploaded_file.pdf", "wb") as f:
