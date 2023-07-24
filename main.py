@@ -6,7 +6,6 @@ import pandas as pd
 from processing import process_pdf
 from PIL import Image
 from design import style
-import streamlit_toggle as tog
 
 
 def show_results(highlights):

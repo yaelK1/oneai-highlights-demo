@@ -1,3 +1,2 @@
 oneai
 streamlit-aggrid
-streamlit-toggle-switch
