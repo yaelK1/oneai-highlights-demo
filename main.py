@@ -10,18 +10,43 @@ from design import style
 
 def show_results(highlights):
     df = pd.DataFrame(
-        [[h.highlight, h.score, h.pages, h.context] for h in highlights],
+        [
+            [h.highlight, h.score, h.pages, h.context]
+            for h in highlights
+            if h is not None
+        ],
         columns=["Highlight", "Score", "Pages", "Context"],
     )
     max_length = df["Highlight"].str.len().max()
     style = f"<style>.highlight-col {{ width: {max_length}ch; }}</style>"
     style += "<style>.pages-col, .score-col { width: 50px; }</style>"
+
+    # Create a new DataFrame column with highlights in bold within the context
+    df["Highlighted_Context"] = df.apply(
+        lambda row: row["Context"].replace(
+            row["Highlight"], f" **{row['Highlight']}** "
+        ),
+        axis=1,
+    )
+
+    # Drop the original "Highlight" and "Context" columns
+    df.drop(columns=["Context"], inplace=True)
+
+    # Rename the new column to "Context"
+    df.rename(columns={"Highlighted_Context": "Context"}, inplace=True)
+
+    # Convert the DataFrame to an HTML table
     df_html = df.to_html(
         columns=["Highlight", "Score", "Pages", "Context"], index=False, justify="left"
     )
+
+    # Add custom styles and the HTML table
     df_html = df_html.replace("<table", f"{style}<table")
+
+    # Display the HTML table in Streamlit
     st.markdown(df_html, unsafe_allow_html=True)
 
+    # Convert DataFrame to CSV data and generate a download link for the CSV file
     csv_data = df.to_csv(index=False)
     b64 = base64.b64encode(csv_data.encode()).decode()
     href = f'<a href="data:file/csv;base64,{b64}" download="highlights.csv">Download Highlights CSV</a>'
