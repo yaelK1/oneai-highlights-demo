@@ -8,7 +8,7 @@ from PIL import Image
 from design import style
 
 
-def show_results(highlights):
+def show_results(highlights, file_name):
     df = pd.DataFrame(
         [
             [h.highlight, h.score, h.pages, h.context]
@@ -37,7 +37,7 @@ def show_results(highlights):
     # Convert DataFrame to CSV data and generate a download link for the CSV file
     csv_data = df.to_csv(index=False)
     b64 = base64.b64encode(csv_data.encode()).decode()
-    href = f'<a href="data:file/csv;base64,{b64}" download="highlights.csv">Download Highlights CSV</a>'
+    href = f'<a href="data:file/csv;base64,{b64}" download={file_name}>Download Highlights CSV</a>'
     st.markdown(href, unsafe_allow_html=True)
     # Convert the DataFrame to an HTML table
     df_html = df.to_html(
@@ -63,37 +63,38 @@ def start_app():
     )
     pdf_file = st.file_uploader("Upload PDF file", type=["pdf"])
     col3, col4 = st.columns([1, 1])
-    # show_all_highlights = False
-    col3, col4 = st.columns([1, 1])
-    with col3:
-        submit_button = st.button("Run")
-        if submit_button:
-            if api_key is None or api_key == "":
-                st.write("Please enter your API key")
-            elif pdf_file is not None:
-                with open("uploaded_file.pdf", "wb") as f:
-                    f.write(pdf_file.getvalue())
-                with open("uploaded_file.pdf", "rb") as f:
-                    try:
-                        highlights = process_pdf(highlight_amount, f, api_key)
-                        if highlights is not None:
-                            show_results(highlights)
-                        with open("uploaded_file.pdf", "rb") as f:
-                            base64_pdf = base64.b64encode(f.read()).decode("utf-8")
-                            pdf_display = f'<embed src="data:application/pdf;base64,{base64_pdf}" width="700" height="1000" type="application/pdf">'
-                            st.markdown(pdf_display, unsafe_allow_html=True)
-                        os.remove("uploaded_file.pdf")
-                    except Exception as e:
-                        st.write(e)
-            else:
-                st.write("Please upload a PDF file")
-    # with col4:
-    #     switch = tog.st_toggle_switch(
-    #         label="Show all highlights",
-    #         key="show_all_highlights",
-    #         label_after=True,
-    #     )
-    #     if switch:
-    #         show_all_highlights = True
-    #     else:
-    #         show_all_highlights = False
+    show_all_highlights = False
+    show_all_highlights_checkbox = st.checkbox(
+        "Show unfiltered highlights", value=False
+    )
+    if show_all_highlights_checkbox:
+        show_all_highlights = True
+    else:
+        show_all_highlights = False
+    submit_button = st.button("Run")
+    if submit_button:
+        if api_key is None or api_key == "":
+            st.write("Please enter your API key")
+        elif pdf_file is not None:
+            with open("uploaded_file.pdf", "wb") as f:
+                f.write(pdf_file.getvalue())
+            with open("uploaded_file.pdf", "rb") as f:
+                try:
+                    highlights = process_pdf(
+                        highlight_amount, f, api_key, show_all_highlights
+                    )
+                    if highlights is not None:
+                        if show_all_highlights:
+                            file_name = pdf_file.name + "_all.csv"
+                        else:
+                            file_name = pdf_file.name + ".csv"
+                        show_results(highlights, file_name)
+                    with open("uploaded_file.pdf", "rb") as f:
+                        base64_pdf = base64.b64encode(f.read()).decode("utf-8")
+                        pdf_display = f'<embed src="data:application/pdf;base64,{base64_pdf}" width="700" height="1000" type="application/pdf">'
+                        st.markdown(pdf_display, unsafe_allow_html=True)
+                    os.remove("uploaded_file.pdf")
+                except Exception as e:
+                    st.write(e)
+        else:
+            st.write("Please upload a PDF file")
