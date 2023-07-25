@@ -64,10 +64,12 @@ def highlight_is_mostly_name_and_number(highlight, names, numbers):
 
 def process_highlight(highlight, pages, segment):
     highlight.pages = []
-    offset = segment.output_spans[0].start
+    # offset = segment.output_spans[0].start
     highlight.segment_text = segment.span_text
-    highlight.start = offset + int(highlight.output_spans[0].start)
-    highlight.end = offset + int(highlight.output_spans[0].end)
+    # highlight.start = offset + int(highlight.output_spans[0].start)
+    highlight.start = highlight.output_spans[0].start
+    # highlight.end = offset + int(highlight.output_spans[0].end)
+    highlight.end = highlight.output_spans[0].end
     highlight.highlight = highlight.span_text
     words_context = 30
     highlight.context = (

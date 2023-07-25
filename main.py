@@ -24,7 +24,7 @@ def show_results(highlights, file_name):
     # Create a new DataFrame column with highlights in bold within the context
     df["Highlighted_Context"] = df.apply(
         lambda row: row["Context"].replace(
-            row["Highlight"], f" **{row['Highlight']}** "
+            row["Highlight"], f" **< {row['Highlight']} >** "
         ),
         axis=1,
     )
