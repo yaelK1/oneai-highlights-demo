@@ -53,16 +53,15 @@ def show_results(highlights, file_name):
 
 def start_app():
     style()
-    image = Image.open("logo.png")
     col1, col2 = st.columns([2, 3])
     col1.title("One AI demo")
+    image = Image.open("logo.png")
     col2.image(image, width=500)
     api_key = st.text_input("Enter your API key")
     highlight_amount = st.selectbox(
         "Select amount of highlights", ["less", "normal", "more"]
     )
     pdf_file = st.file_uploader("Upload PDF file", type=["pdf"])
-    col3, col4 = st.columns([1, 1])
     show_all_highlights = False
     show_all_highlights_checkbox = st.checkbox(
         "Show unfiltered highlights", value=False
