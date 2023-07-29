@@ -1,1 +1,3 @@
 oneai
+pandas
+PIL
